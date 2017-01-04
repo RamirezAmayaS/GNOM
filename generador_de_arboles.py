@@ -7,7 +7,7 @@ import itertools
 from TAD import TAD
 from estructuras_de_datos import Pila,Nodo,Arbol
 
-# Procedimiento que construye un árbol a partir de su representación como paréntesis anidado
+# Procedimiento que construye un árbol a partir de su representación como paréntesis anidado y lo etiqueta
 def parentesis_a_arbol_etiquetado(parentesis,etiquetas):
     # Stack para almacenar el último nodo abierto
     pila = Pila()
@@ -112,23 +112,30 @@ def instanciar_TAD(signatura):
     nombre = split_signatura[0]
     if len(split_signatura) > 1:
         parametro = split_signatura[1][:-1]
+        parametros = parse_exp_parametros(parametro)
+    else:
+        parametros = []
 
-    tad = TAD(nombre=nombre,es_basico=False)
+    tad = TAD(nombre=nombre,es_basico=False,parametros=parametros)
 
     #Especificación de Tipos Abstractos de Datos
 
     if nombre == 'Cola':
         tad.anadir_generadora('vac_cola',())
-        tad.anadir_generadora('ins',('Cola[' + parametro + ']','[' + parametro + ']'))
+        for param in parametros:
+            tad.anadir_generadora('ins_' + param.split('[')[0],('Cola[' + parametro + ']','[' + param + ']'))
 
     elif nombre == 'DCola':
         tad.anadir_generadora('vac_dcola',())
-        tad.anadir_generadora('ins_der',('DCola[' + parametro + ']','[' + parametro + ']'))
-        tad.anadir_generadora('ins_izq',('[' + parametro + ']','DCola[' + parametro + ']'))
+        for param in parametros:
+            tad.anadir_generadora('ins_der_' + param.split('[')[0],('DCola[' + parametro + ']','[' + param + ']'))
+            tad.anadir_generadora('ins_izq_' + param.split('[')[0],('[' + param + ']','DCola[' + parametro + ']'))
 
     elif nombre == 'Arbin':
         tad.anadir_generadora('vac_arbin',())
-        tad.anadir_generadora('cons',('Arbin[' + parametro + ']','[' + parametro + ']','Arbin[' + parametro + ']'))
+        for param in parametros:
+            tad.anadir_generadora('cons_',('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
+            #tad.anadir_generadora('cons_' + param.split('[')[0],('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
 
     # Especificación de Tipos Primitivos
 
@@ -142,6 +149,27 @@ def instanciar_TAD(signatura):
         tad.anadir_generadora(nombre,())
 
     return tad
+
+def parse_exp_parametros(exp_parametros):
+    pila = []
+    pos_parametros = [0]
+    for i,c in enumerate(exp_parametros):
+        if c == '[':
+            pila.append(i)
+        elif c == ']' and pila:
+            pila.pop()
+        elif c == ',' and not pila:
+            pos_parametros.append(i)
+
+    parametros = []
+    if len(pos_parametros) > 1:
+        for i in list(range(1,len(pos_parametros))):
+            parametros.append(exp_parametros[pos_parametros[i-1]:pos_parametros[i]].replace(',',''))
+        parametros.append(exp_parametros[pos_parametros[len(pos_parametros)-1]:len(exp_parametros)].replace(',',''))
+    else:
+        parametros.append(exp_parametros)
+
+    return parametros
 
 def list_or_tuple(x):
     return isinstance(x, (list, tuple))

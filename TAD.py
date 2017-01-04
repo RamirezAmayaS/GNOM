@@ -1,8 +1,9 @@
 class TAD(object):
 
-    def __init__(self,nombre,es_basico):
+    def __init__(self,nombre,es_basico,parametros):
         self.nombre = nombre
         self.es_basico = es_basico
+        self.parametros = parametros
         self.generadoras = {}
 
     def anadir_generadora(self,nombre,dominio):
