@@ -34,12 +34,17 @@ class Arbol(object):
     def __init__(self,raiz):
         self.raiz = raiz
 
-    def imprimir_arbol_etiquetado(self):
-        print(self.raiz.data,end='')
-        print('(',end='')
+    def imprimir_arbol_etiquetado(self,representacion):
+        rep = representacion + str(self.raiz.data)
+        #print(self.raiz.data,end='')
+        rep = rep + '('
+        #print('(',end='')
         if(len(self.raiz.children)==0):
-            print(')',end='')
+            rep = rep + ')'
+            #print(')',end='')
         else:
             for hijo in self.raiz.children:
-                Arbol(hijo).imprimir_arbol_etiquetado()
-            print (')',end='')
+                rep = rep + Arbol(hijo).imprimir_arbol_etiquetado('')
+            rep = rep + ')'
+            #print (')',end='')
+        return rep

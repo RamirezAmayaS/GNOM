@@ -4,10 +4,12 @@
 import sys
 import time
 import itertools
-from TAD import TAD
-from estructuras_de_datos import Pila,Nodo,Arbol
+import re
+import os
+from .TAD import TAD
+from .estructuras_de_datos import Pila,Nodo,Arbol
 
-# Procedimiento que construye un árbol a partir de su representación como paréntesis anidado y lo etiqueta
+# Procedimiento que construye un árbol a partir de su representación como paréntesis anidado
 def parentesis_a_arbol_etiquetado(parentesis,etiquetas):
     # Stack para almacenar el último nodo abierto
     pila = Pila()
@@ -57,7 +59,7 @@ def generar_etiquetas(arbol,tad):
 
 # Implementación en Python del algoritmo P (Knuth 2005)
 # Generación de todos los paréntesis anidados en orden lexicográfico
-def generar_arboles_aptos(n,tad):
+def generar_arboles_aptos(n,tad,f):
     tiempo_inicio = time.time()
     #P1 - Inicializar
     a = [izquierdo if i % 2 == 1 else derecho for i in range(0,2*n+1)]
@@ -76,8 +78,10 @@ def generar_arboles_aptos(n,tad):
                 for tag in flatten(etiqueta):
                     etiqueta_lineal.append(tag)
                 arbol = parentesis_a_arbol_etiquetado(candidato,etiqueta_lineal)
-                arbol.imprimir_arbol_etiquetado()
-                print(' ')
+                arbol_etiquetado = procesar(arbol.imprimir_arbol_etiquetado(''))
+                print(arbol_etiquetado)
+                f.write(arbol_etiquetado)
+                f.write('\n')
                 aptos = aptos + 1
         #P3 - Caso fácil?
         a[m] = derecho
@@ -102,7 +106,7 @@ def generar_arboles_aptos(n,tad):
 
     tiempo_total = time.time() - tiempo_inicio
     print(' ')
-    print ('********************************** Se contaron %d árboles aptos en %f segundos ********************************' % (aptos,tiempo_total))
+    print ('********************************** Se contaron %d árboles síntacticos en %f segundos ********************************' % (aptos,tiempo_total))
     print(' ')
 
 def instanciar_TAD(signatura):
@@ -123,19 +127,18 @@ def instanciar_TAD(signatura):
     if nombre == 'Cola':
         tad.anadir_generadora('vac_cola',())
         for param in parametros:
-            tad.anadir_generadora('ins_' + param.split('[')[0],('Cola[' + parametro + ']','[' + param + ']'))
+            tad.anadir_generadora('ins_' + param.split('[')[0][0:3],('Cola[' + parametro + ']','[' + param + ']'))
 
     elif nombre == 'DCola':
         tad.anadir_generadora('vac_dcola',())
         for param in parametros:
-            tad.anadir_generadora('ins_der_' + param.split('[')[0],('DCola[' + parametro + ']','[' + param + ']'))
-            tad.anadir_generadora('ins_izq_' + param.split('[')[0],('[' + param + ']','DCola[' + parametro + ']'))
+            tad.anadir_generadora('ins_der_' + param.split('[')[0][0:3],('DCola[' + parametro + ']','[' + param + ']'))
+            tad.anadir_generadora('ins_izq_' + param.split('[')[0][0:3],('[' + param + ']','DCola[' + parametro + ']'))
 
     elif nombre == 'Arbin':
         tad.anadir_generadora('vac_arbin',())
         for param in parametros:
-            tad.anadir_generadora('cons_',('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
-            #tad.anadir_generadora('cons_' + param.split('[')[0],('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
+            tad.anadir_generadora('cons_' + param.split('[')[0][0:3],('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
 
     # Especificación de Tipos Primitivos
 
@@ -171,6 +174,36 @@ def parse_exp_parametros(exp_parametros):
 
     return parametros
 
+def procesar(arbol_etiquetado):
+    arbol_etiquetado = arbol_etiquetado.replace('ins_nat','ins')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_int','ins')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_boo','ins')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_Col','ins')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_DCo','ins')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_Arb','ins')
+
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_nat','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_int','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_boo','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_Col','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_DCo','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_der_Arb','ins_der')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_nat','ins_izq')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_int','ins_izq')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_boo','ins_izq')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_Col','ins_izq')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_DCo','ins_izq')
+    arbol_etiquetado = arbol_etiquetado.replace('ins_izq_Arb','ins_izq')
+
+    arbol_etiquetado = arbol_etiquetado.replace('cons_nat','cons')
+    arbol_etiquetado = arbol_etiquetado.replace('cons_int','cons')
+    arbol_etiquetado = arbol_etiquetado.replace('cons_boo','cons')
+    arbol_etiquetado = arbol_etiquetado.replace('cons_Col','cons')
+    arbol_etiquetado = arbol_etiquetado.replace('cons_DCo','cons')
+    arbol_etiquetado = arbol_etiquetado.replace('cons_Arb','cons')
+
+    return arbol_etiquetado
+
 def list_or_tuple(x):
     return isinstance(x, (list, tuple))
 
@@ -182,13 +215,22 @@ def flatten(sequence, to_expand=list_or_tuple):
         else:
             yield item
 
-if __name__ == "__main__":
+def generar_arboles(nodos,tad):
+
+    global izquierdo
     izquierdo = '('
+    global derecho
     derecho = ')'
-    nodos = int(sys.argv[1])
-    signatura = sys.argv[2]
+    n = int(nodos)
+    global signatura
+    signatura = tad
     print('')
-    print('************* El conjunto de árboles etiquetados aptos para representar nombres en %s es: *************' % signatura)
-    print('')
-    tad = instanciar_TAD(signatura)
-    generar_arboles_aptos(nodos,tad)
+
+    try:
+        f = open(os.path.join(sys.path[0], 'salidas/generador_arboles/%s' % str(n) + '_' + signatura + '.txt'), 'x')
+        print('************* El conjunto de árboles sintácticos con %d nodos aptos para representar nombres en %s es: *************' % (int(n),signatura))
+        print('')
+        tad = instanciar_TAD(signatura)
+        generar_arboles_aptos(n,tad,f)
+    except FileExistsError:
+        print('El conjunto de árboles sintácticos con %d nodos para %s ya fue generado. Se encuentra en ./salidas/generador_arboles/%d_%s \n' % (n,signatura,n,signatura))

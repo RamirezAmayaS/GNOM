@@ -1,0 +1,1 @@
+ins(vac_cola()nat@1:5@())
