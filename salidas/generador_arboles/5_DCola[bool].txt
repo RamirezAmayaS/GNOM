@@ -1,0 +1,4 @@
+ins_izq(bool()ins_der(vac_dcola()bool()))
+ins_izq(bool()ins_izq(bool()vac_dcola()))
+ins_der(ins_izq(bool()vac_dcola())bool())
+ins_der(ins_der(vac_dcola()bool())bool())

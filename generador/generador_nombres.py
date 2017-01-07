@@ -29,7 +29,7 @@ def calcular_representatividad(arbol):
 
     placeholders_bool = [m.start() for m in re.finditer('bool',arbol)]
     if len(placeholders_bool) > 0:
-        representatividad = representatividad*2*len(placeholders_bool)
+        representatividad = representatividad*2**len(placeholders_bool)
 
     return representatividad
 

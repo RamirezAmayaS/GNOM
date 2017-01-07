@@ -4,9 +4,14 @@ from .generador_arboles import generar_arboles
 from. generador_nombres import generar_nombres
 
 print(" ")
-print("Ejecutando versión 1.0 de GNOM...")
+print("name = GNom")
+print("version = 1.0")
+print("author = Simón Ramírez Amaya")
+print("author-email = s.ramirez34@uniandes.edu.co")
 print(" ")
-funcionalidad = input("Bienvenido a GNOM. Por favor indique si desea generar árboles sintácticos (A) o generar una muestra de nombres (N) : ")
+print("Bienvenido a GNom!")
+print(" ")
+funcionalidad = input("Por favor indique si desea generar árboles sintácticos (A) o generar una muestra de nombres (N) : ")
 print(" ")
 if(funcionalidad=='A'):
     n = input("Indique el tamaño de los árboles a generar: ")
