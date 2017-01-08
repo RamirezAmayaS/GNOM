@@ -21,4 +21,5 @@ elif(funcionalidad=='N'):
     n = input("Indique el tamaño de los árboles generados: ")
     especificacion = input("Especifique el Tipo Abstracto de Dato: ")
     m = input("Indique el tamaño de la muestra a generar: ")
-    generar_nombres(n,especificacion,m)
+    h = input("Indique si desea generar un histograma para la muestra (N/S): ")
+    generar_nombres(n,especificacion,m,h)

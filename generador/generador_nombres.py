@@ -6,6 +6,10 @@ import re
 import random
 import time
 import os
+import collections
+import matplotlib.pyplot as plt
+import pylab as pl
+import numpy as np
 
 def leer_arboles(f):
     arboles = {}
@@ -71,21 +75,39 @@ def instanciar_nombre(arbol):
 
 def generar_muestra(arboles,m):
     f = open(os.path.join(sys.path[0],'salidas/generador_nombres/%s' % str(n) + '_' + signatura + time.strftime("%Y%m%d-%H:%M:%S") + '.txt'), 'x')
+    frecuencia_muestra = collections.defaultdict(lambda:0)
     for i in list(range(m)):
         arbol = elegir_arbol(arboles)
         nombre = instanciar_nombre(arbol)
         f.write(nombre)
         f.write('\n')
         print(nombre)
+        frecuencia_muestra[nombre] += 1
+    if hist == 'S':
+        mostrar_histograma(arbol,frecuencia_muestra)
 
+def mostrar_histograma(arbol,frecuencia_muestra):
+    x = np.arange(len(frecuencia_muestra))
+    pl.bar(x, frecuencia_muestra.values(), align='center', width=0.5)
+    pl.xlabel("Nombres en Y[X]",fontsize=18)
+    pl.tick_params(axis='x',which='both',bottom='off',top='off',labelbottom='off')
+    pl.ylabel("Frecuencia muestral",fontsize=18)
+    ymax = max(frecuencia_muestra.values()) + max(frecuencia_muestra.values())/10
+    pl.ylim(0, ymax)
+    pl.suptitle('n=%d, m=%d, Y[X]=%s' % (n,m,signatura))
+    plt.savefig('salidas/hists/%s' % str(n) + '_' + signatura + '_' + str(m))
+    pl.show()
 
-def generar_nombres(nodos,tad,m):
+def generar_nombres(nodos,tad,muestra,h):
 
     global n
     n = int(nodos)
     global signatura
     signatura = tad
-    m = int(m)
+    global hist
+    hist = h
+    global m
+    m = int(muestra)
     print('')
 
     try:

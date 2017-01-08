@@ -1,0 +1,2 @@
+ins(vac_cola()nat@0:9@())
+ins(vac_cola()bool())
