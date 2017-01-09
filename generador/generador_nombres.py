@@ -120,6 +120,5 @@ def generar_nombres(nodos,tad,muestra,h):
         print('')
         print('***************** Se contaron %d nombres en %s representables a partir de árboles sintácticos con %d nodos.  ******************' % (sum(arboles.values()),signatura,n))
         print('')
-        time.sleep(1)
     except FileNotFoundError:
         print('El conjunto de árboles sintácticos con %d nodos para %s no ha sido generado. Utilice el generador de árboles.\n' % (n,signatura))

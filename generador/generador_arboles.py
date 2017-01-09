@@ -71,11 +71,15 @@ def generar_arboles_aptos(n,tad,f):
     while not finalizado:
         total = total + 1
         candidato = ''.join(str(x) for x in a)[1:]
+
+        #Evaluación de árbol candidato
+        # Generación de todas las etiquetas
         etiquetas = generar_etiquetas(parentesis_a_arbol_etiquetado(candidato,list(' '*n)),tad)
         if etiquetas:
+            # Generación de árboles representativos
             for etiqueta in etiquetas:
                 etiqueta_lineal = []
-                for tag in flatten(etiqueta):
+                for tag in linealizar(etiqueta):
                     etiqueta_lineal.append(tag)
                 arbol = parentesis_a_arbol_etiquetado(candidato,etiqueta_lineal)
                 arbol_etiquetado = procesar(arbol.imprimir_arbol_etiquetado(''))
@@ -83,6 +87,7 @@ def generar_arboles_aptos(n,tad,f):
                 f.write(arbol_etiquetado)
                 f.write('\n')
                 aptos = aptos + 1
+
         #P3 - Caso fácil?
         a[m] = derecho
         if a[m-1] == derecho:
@@ -110,6 +115,7 @@ def generar_arboles_aptos(n,tad,f):
     print(' ')
 
 def instanciar_TAD(signatura):
+    # Parsing de signatura
     if signatura[0] == '[' and signatura[len(signatura)-1] == ']':
         signatura = signatura[1:-1]
     split_signatura = signatura.split('[',1)
@@ -123,25 +129,26 @@ def instanciar_TAD(signatura):
     tad = TAD(nombre=nombre,es_basico=False,parametros=parametros)
 
     #Especificación de Tipos Abstractos de Datos
-
     if nombre == 'Cola':
         tad.anadir_generadora('vac_cola',())
+        # Creación de generadoras articiales
         for param in parametros:
             tad.anadir_generadora('ins_' + param.split('[')[0][0:3],('Cola[' + parametro + ']','[' + param + ']'))
 
     elif nombre == 'DCola':
         tad.anadir_generadora('vac_dcola',())
+        # Creación de generadoras articiales
         for param in parametros:
             tad.anadir_generadora('ins_der_' + param.split('[')[0][0:3],('DCola[' + parametro + ']','[' + param + ']'))
             tad.anadir_generadora('ins_izq_' + param.split('[')[0][0:3],('[' + param + ']','DCola[' + parametro + ']'))
 
     elif nombre == 'Arbin':
         tad.anadir_generadora('vac_arbin',())
+        # Creación de generadoras articiales
         for param in parametros:
             tad.anadir_generadora('cons_' + param.split('[')[0][0:3],('Arbin[' + parametro + ']','[' + param + ']','Arbin[' + parametro + ']'))
 
-    # Especificación de Tipos Primitivos
-
+    # Especificación de Tipos Primitivos Finitos
     elif nombre.startswith('bool'):
         tad.anadir_generadora(nombre,())
 
@@ -153,6 +160,7 @@ def instanciar_TAD(signatura):
 
     return tad
 
+# Procedimiento para definir los parámetros de un TAD a partir de su expresión anidada.
 def parse_exp_parametros(exp_parametros):
     pila = []
     pos_parametros = [0]
@@ -174,6 +182,7 @@ def parse_exp_parametros(exp_parametros):
 
     return parametros
 
+# Procedimiento para reemplazar etiquetas de generadoras artificiales
 def procesar(arbol_etiquetado):
     arbol_etiquetado = arbol_etiquetado.replace('ins_nat','ins')
     arbol_etiquetado = arbol_etiquetado.replace('ins_int','ins')
@@ -204,17 +213,19 @@ def procesar(arbol_etiquetado):
 
     return arbol_etiquetado
 
-def list_or_tuple(x):
-    return isinstance(x, (list, tuple))
+# Procedimientos instrumentales para linealizar una tupla
+def lista_o_tupla(t):
+    return isinstance(t, (list, tuple))
 
-def flatten(sequence, to_expand=list_or_tuple):
-    for item in sequence:
-        if to_expand(item):
-            for subitem in flatten(item, to_expand):
-                yield subitem
+def linealizar(secuencia, exp=lista_o_tupla):
+    for elemento in secuencia:
+        if exp(elemento):
+            for sub in linealizar(elemento, exp):
+                yield sub
         else:
-            yield item
+            yield elemento
 
+# Procedimiento principal
 def generar_arboles(nodos,tad):
 
     global izquierdo
