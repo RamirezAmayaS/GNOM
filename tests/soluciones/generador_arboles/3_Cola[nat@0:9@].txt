@@ -1,1 +1,0 @@
-ins(vac_cola()nat@0:9@())

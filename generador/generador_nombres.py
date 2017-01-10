@@ -25,7 +25,7 @@ def calcular_representatividad(arbol):
     placeholders_at = [m.start() for m in re.finditer('@',arbol)]
     for i,at in enumerate(placeholders_at):
         if i%2 == 0:
-            split = arbol[placeholders_at[i]+1:placeholders_at[i+1]].split(':')
+            split = arbol[placeholders_at[i]+1:placeholders_at[i+1]].split('#')
             a = int(split[0])
             b = int(split[1])
             tamano = b-a+1
@@ -51,7 +51,7 @@ def instanciar_nombre(arbol):
     placeholders_at = [m.start() for m in re.finditer('@',arbol)]
     for i,at in enumerate(placeholders_at):
         if i%2 == 0:
-            split = arbol[placeholders_at[i]+1:placeholders_at[i+1]].split(':')
+            split = arbol[placeholders_at[i]+1:placeholders_at[i+1]].split('#')
             a = int(split[0])
             b = int(split[1])
             nombre_temp = nombre_temp + arbol[pos:placeholders_at[i]-3] + str(random.randint(a,b))
@@ -74,7 +74,7 @@ def instanciar_nombre(arbol):
     return nombre
 
 def generar_muestra(arboles,m):
-    f = open(os.path.join(sys.path[0],'salidas/generador_nombres/%s' % str(n) + '_' + signatura + time.strftime("%Y%m%d-%H:%M:%S") + '.txt'), 'x')
+    f = open(os.path.join(sys.path[0],'salidas/generador_nombres/%s' % str(n) + '_' + signatura + time.strftime("%Y%m%d-%H#%M#%S") + '.txt'), 'x')
     frecuencia_muestra = collections.defaultdict(lambda:0)
     for i in list(range(m)):
         arbol = elegir_arbol(arboles)

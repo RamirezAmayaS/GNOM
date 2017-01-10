@@ -1,5 +1,0 @@
-cons(vac_arbin()nat@0:9@()cons(vac_arbin()nat@0:9@()cons(vac_arbin()nat@0:9@()vac_arbin())))
-cons(vac_arbin()nat@0:9@()cons(cons(vac_arbin()nat@0:9@()vac_arbin())nat@0:9@()vac_arbin()))
-cons(cons(vac_arbin()nat@0:9@()vac_arbin())nat@0:9@()cons(vac_arbin()nat@0:9@()vac_arbin()))
-cons(cons(vac_arbin()nat@0:9@()cons(vac_arbin()nat@0:9@()vac_arbin()))nat@0:9@()vac_arbin())
-cons(cons(cons(vac_arbin()nat@0:9@()vac_arbin())nat@0:9@()vac_arbin())nat@0:9@()vac_arbin())

@@ -1,4 +1,0 @@
-cons(vac_arbin()vac_cola()cons(vac_arbin()ins(vac_cola()nat@0:9@())vac_arbin()))
-cons(vac_arbin()ins(vac_cola()nat@0:9@())cons(vac_arbin()vac_cola()vac_arbin()))
-cons(cons(vac_arbin()vac_cola()vac_arbin())ins(vac_cola()nat@0:9@())vac_arbin())
-cons(cons(vac_arbin()ins(vac_cola()nat@0:9@())vac_arbin())vac_cola()vac_arbin())

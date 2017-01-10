@@ -1,1 +1,0 @@
-ins(ins(vac_cola()bool())bool())

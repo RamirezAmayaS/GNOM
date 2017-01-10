@@ -1,5 +1,0 @@
-cons(vac_arbin()bool()cons(vac_arbin()bool()cons(vac_arbin()bool()vac_arbin())))
-cons(vac_arbin()bool()cons(cons(vac_arbin()bool()vac_arbin())bool()vac_arbin()))
-cons(cons(vac_arbin()bool()vac_arbin())bool()cons(vac_arbin()bool()vac_arbin()))
-cons(cons(vac_arbin()bool()cons(vac_arbin()bool()vac_arbin()))bool()vac_arbin())
-cons(cons(cons(vac_arbin()bool()vac_arbin())bool()vac_arbin())bool()vac_arbin())
