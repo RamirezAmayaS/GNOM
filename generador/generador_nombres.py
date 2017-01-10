@@ -111,14 +111,20 @@ def generar_nombres(nodos,tad,muestra,h):
     print('')
 
     try:
+        tiempo_inicio = time.time()
         str(n) + '_' + signatura + '.txt'
         f = open('salidas/generador_arboles/%s' % str(n) + '_' + signatura + '.txt', 'r')
         print('************* La muestra de tamaño %d de nombres en %s representables a partir de árboles sintácticos con %d nodos es: *************' % (m,signatura,n))
         print('')
         arboles = leer_arboles(f)
-        generar_muestra(arboles,m)
-        print('')
-        print('***************** Se contaron %d nombres en %s representables a partir de árboles sintácticos con %d nodos.  ******************' % (sum(arboles.values()),signatura,n))
-        print('')
+        if arboles:
+            generar_muestra(arboles,m)
+            tiempo_total = time.time() - tiempo_inicio
+            print('')
+            print('***************** Se contaron %d nombres en %s representables a partir de árboles sintácticos con %d nodos en %f segundos.  ******************' % (sum(arboles.values()),signatura,n,tiempo_total))
+            print('')
+        else:
+            print('*************************** La muestra es vacía puesto que no hay nombres para esta especificación ******************************')
+            print('')
     except FileNotFoundError:
         print('El conjunto de árboles sintácticos con %d nodos para %s no ha sido generado. Utilice el generador de árboles.\n' % (n,signatura))
